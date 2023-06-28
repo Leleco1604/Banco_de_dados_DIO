@@ -35,7 +35,7 @@ class User(Base):
 class Address(Base):
     __tablename__ = "address"
 
-    # atributos
+    # atributos // nullable = não pode ficar em branco, o usuario precisa colocar algo 
     id = Column(Integer, primary_key=True)
     email_address = Column(String(30), nullable=False)
     user_id = Column(Integer, ForeignKey("user_account.id"), nullable=False)
