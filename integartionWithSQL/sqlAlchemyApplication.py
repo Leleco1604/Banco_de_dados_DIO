@@ -11,7 +11,7 @@ Base = declarative_base()
 
 
 class User(Base):
-    __table_name__ = "user_account"
+    __tablename__ = "user_account"
    
     # atributos
     id = Column(Integer, primary_key= True )
@@ -47,8 +47,8 @@ class Address(Base):
 
 
 
-print(User.__table_name__)
-print(User.__table__)
+print(User.__tablename__)
+print(Address.__tablename__)
 
 
 
