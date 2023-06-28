@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import func
 from sqlalchemy import create_engine
 from sqlalchemy import select
 from sqlalchemy import inspect
@@ -39,7 +40,9 @@ class Address(Base):
     email_address = Column(String(30), nullable=False)
     user_id = Column(Integer, ForeignKey("user_account.id"), nullable=False)
 
-    user = relationship("User", back_populates="address")
+    user = relationship(
+        "User", back_populates="address"
+    )
 
     def __repr__(self):
         return f"Address(id = {self.id}, email_address = {self.email_address})"
@@ -100,3 +103,28 @@ stmt_address = select(Address).where(Address.user_id.in_([2]))
 print('\nRecuperando os endereços de email de sandy')
 for address in session.scalars(stmt_address):
     print(address)
+
+#recuperar infomações de maneira ordenada usando o desc()
+stmt_order = select(User).order_by(User.fullname.desc())
+print("\nRecuperando informações de maneira ordenada")
+for result in session.scalars(stmt_order):
+    print(result)
+
+
+stmt_join = select(User.fullname, Address.email_address).join_from(Address,User)
+print("\n")
+for result in session.scalars(stmt_join):
+    print(result)
+
+
+connection = engine.connect()
+results = connection.execute(stmt_join).fetchall()
+print("\nExecutando statement a partir da connection")
+for result in results:
+    print(result)
+
+stmt_count = select(func.count('*')).select_from(User)  
+print("\nTotal de instâncias em User ")
+for result in session.scalars(stmt_count):
+    print(result)
+
