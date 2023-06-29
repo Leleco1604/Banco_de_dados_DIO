@@ -1,1 +1,2 @@
-import pymongo
+import pymongo as pyM
+
